@@ -1,14 +1,12 @@
-import {
-  Column,
+import { Column,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { EventRoleTemplate } from "./EventRoleTemplate";
-import { GuildEvent } from "./GuildEvent";
-import { GuildRole } from "./GuildRole";
+  PrimaryGeneratedColumn, type Relation } from "typeorm";
+import { EventRoleTemplate } from "./EventRoleTemplate.js";
+import { GuildEvent } from "./GuildEvent.js";
+import { GuildRole } from "./GuildRole.js";
 
 @Index("role_map_ge_FK", ["guildEventId"], {})
 @Index("role_map_gr_FK", ["guildRoleId"], {})
@@ -36,19 +34,19 @@ export class GuildEventRoleMap {
     { onDelete: "RESTRICT", onUpdate: "CASCADE" }
   )
   @JoinColumn([{ name: "template_id", referencedColumnName: "id" }])
-  template: EventRoleTemplate;
+  template: Relation<EventRoleTemplate>;
 
   @ManyToOne(() => GuildEvent, (guildEvent) => guildEvent.guildEventRoleMaps, {
     onDelete: "CASCADE",
     onUpdate: "RESTRICT",
   })
   @JoinColumn([{ name: "guild_event_id", referencedColumnName: "id" }])
-  guildEvent: GuildEvent;
+  guildEvent: Relation<GuildEvent>;
 
   @ManyToOne(() => GuildRole, (guildRole) => guildRole.guildEventRoleMaps, {
     onDelete: "CASCADE",
     onUpdate: "RESTRICT",
   })
   @JoinColumn([{ name: "guild_role_id", referencedColumnName: "id" }])
-  guildRole: GuildRole;
+  guildRole: Relation<GuildRole>;
 }

@@ -5,8 +5,9 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  type Relation,
 } from "typeorm";
-import { Author } from "./Author";
+import { Author } from "./Author.js";
 
 @Index("author_link_author_id_IDX", ["authorId"], {})
 @Entity("author_link", { schema: "Tavare" })
@@ -28,5 +29,5 @@ export class AuthorLink {
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "author_id", referencedColumnName: "id" }])
-  author: Author;
+  author!: Relation<Author>;
 }

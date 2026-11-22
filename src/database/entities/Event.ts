@@ -1,7 +1,7 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { GuildCurrency } from "./GuildCurrency";
-import { GuildEvent } from "./GuildEvent";
-import { UserEvent } from "./UserEvent";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, type Relation } from "typeorm";
+import { GuildCurrency } from "./GuildCurrency.js";
+import { GuildEvent } from "./GuildEvent.js";
+import { UserEvent } from "./UserEvent.js";
 
 @Entity("event", { schema: "Tavare" })
 export class Event {
@@ -35,11 +35,11 @@ export class Event {
   announcementMessage: string;
 
   @OneToMany(() => GuildCurrency, (guildCurrency) => guildCurrency.event)
-  guildCurrencies: GuildCurrency[];
+  guildCurrencies: Relation<GuildCurrency[]>;
 
   @OneToMany(() => GuildEvent, (guildEvent) => guildEvent.event)
-  guildEvents: GuildEvent[];
+  guildEvents: Relation<GuildEvent[]>;
 
   @OneToMany(() => UserEvent, (userEvent) => userEvent.event)
-  userEvents: UserEvent[];
+  userEvents: Relation<UserEvent[]>;
 }

@@ -1,5 +1,5 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { GuildEventRoleMap } from "./GuildEventRoleMap";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, type Relation } from "typeorm";
+import { GuildEventRoleMap } from "./GuildEventRoleMap.js";
 
 @Entity("event_role_template", { schema: "Tavare" })
 export class EventRoleTemplate {
@@ -34,5 +34,5 @@ export class EventRoleTemplate {
     () => GuildEventRoleMap,
     (guildEventRoleMap) => guildEventRoleMap.template
   )
-  guildEventRoleMaps: GuildEventRoleMap[];
+  guildEventRoleMaps: Relation<GuildEventRoleMap[]>;
 }

@@ -1,13 +1,11 @@
-import {
-  Column,
+import { Column,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { Event } from "./Event";
-import { Users } from "./Users";
+  PrimaryGeneratedColumn, type Relation } from "typeorm";
+import { Event } from "./Event.js";
+import { Users } from "./Users.js";
 
 @Index("user_event_multikey_IDX", ["userId", "eventId", "eventYear"], {
   unique: true,
@@ -41,12 +39,12 @@ export class UserEvent {
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "event_id", referencedColumnName: "id" }])
-  event: Event;
+  event: Relation<Event>;
 
   @ManyToOne(() => Users, (users) => users.userEvents, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
-  user: Users;
+  user: Relation<Users>;
 }

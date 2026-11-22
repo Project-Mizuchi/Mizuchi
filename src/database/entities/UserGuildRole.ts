@@ -1,13 +1,11 @@
-import {
-  Column,
+import { Column,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { GuildRole } from "./GuildRole";
-import { Users } from "./Users";
+  PrimaryGeneratedColumn, type Relation } from "typeorm";
+import { GuildRole } from "./GuildRole.js";
+import { Users } from "./Users.js";
 
 @Index("user_guild_role_unique", ["userId", "guildRoleId"], { unique: true })
 @Index("user_guild_role_guild_role_FK", ["guildRoleId"], {})
@@ -27,12 +25,12 @@ export class UserGuildRole {
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "guild_role_id", referencedColumnName: "id" }])
-  guildRole: GuildRole;
+  guildRole: Relation<GuildRole>;
 
   @ManyToOne(() => Users, (users) => users.userGuildRoles, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
-  user: Users;
+  user: Relation<Users>;
 }

@@ -1,16 +1,14 @@
-import {
-  Column,
+import { Column,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { GuildEventRoleMap } from "./GuildEventRoleMap";
-import { GuildRoleInventory } from "./GuildRoleInventory";
-import { UserGuildRole } from "./UserGuildRole";
-import { Guild } from "./Guild";
+  PrimaryGeneratedColumn, type Relation } from "typeorm";
+import { GuildEventRoleMap } from "./GuildEventRoleMap.js";
+import { GuildRoleInventory } from "./GuildRoleInventory.js";
+import { UserGuildRole } from "./UserGuildRole.js";
+import { Guild } from "./Guild.js";
 
 @Index("guild_role_unique", ["snowflake"], { unique: true })
 @Index("guild_role_guild_FK", ["guildId"], {})
@@ -55,37 +53,37 @@ export class GuildRole {
     () => GuildEventRoleMap,
     (guildEventRoleMap) => guildEventRoleMap.guildRole
   )
-  guildEventRoleMaps: GuildEventRoleMap[];
+  guildEventRoleMaps: Relation<GuildEventRoleMap[]>;
 
   @OneToMany(
     () => GuildRoleInventory,
     (guildRoleInventory) => guildRoleInventory.grantedGuildRole
   )
-  guildRoleInventories: GuildRoleInventory[];
+  guildRoleInventories: Relation<GuildRoleInventory[]>;
 
   @OneToMany(
     () => GuildRoleInventory,
     (guildRoleInventory) => guildRoleInventory.grantedByGuildRole
   )
-  guildRoleInventories2: GuildRoleInventory[];
+  guildRoleInventories2: Relation<GuildRoleInventory[]>;
 
   @OneToMany(() => UserGuildRole, (userGuildRole) => userGuildRole.guildRole)
-  userGuildRoles: UserGuildRole[];
+  userGuildRoles: Relation<UserGuildRole[]>;
 
   @ManyToOne(() => Guild, (guild) => guild.guildRoles, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "guild_id", referencedColumnName: "id" }])
-  guild: Guild;
+  guild: Relation<Guild>;
 
   @ManyToOne(() => GuildRole, (guildRole) => guildRole.guildRoles, {
     onDelete: "SET NULL",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "slave_role_id", referencedColumnName: "id" }])
-  slaveRole: GuildRole;
+  slaveRole: Relation<GuildRole>;
 
   @OneToMany(() => GuildRole, (guildRole) => guildRole.slaveRole)
-  guildRoles: GuildRole[];
+  guildRoles: Relation<GuildRole[]>;
 }

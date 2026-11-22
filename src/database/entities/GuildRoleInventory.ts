@@ -1,13 +1,11 @@
-import {
-  Column,
+import { Column,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { GuildRole } from "./GuildRole";
-import { UserGuild } from "./UserGuild";
+  PrimaryGeneratedColumn, type Relation } from "typeorm";
+import { GuildRole } from "./GuildRole.js";
+import { UserGuild } from "./UserGuild.js";
 
 @Index("guild_role_inventory_guild_role_FK", ["grantedGuildRoleId"], {})
 @Index("guild_role_inventory_date_expires_IDX", ["dateExpires"], {})
@@ -90,7 +88,7 @@ export class GuildRoleInventory {
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "granted_guild_role_id", referencedColumnName: "id" }])
-  grantedGuildRole: GuildRole;
+  grantedGuildRole: Relation<GuildRole>;
 
   @ManyToOne(() => GuildRole, (guildRole) => guildRole.guildRoleInventories2, {
     onDelete: "CASCADE",
@@ -99,7 +97,7 @@ export class GuildRoleInventory {
   @JoinColumn([
     { name: "granted_by_guild_role_id", referencedColumnName: "id" },
   ])
-  grantedByGuildRole: GuildRole;
+  grantedByGuildRole: Relation<GuildRole>;
 
   @ManyToOne(() => UserGuild, (userGuild) => userGuild.guildRoleInventories, {
     onDelete: "CASCADE",
@@ -108,5 +106,5 @@ export class GuildRoleInventory {
   @JoinColumn([
     { name: "granted_by_user_guild_id", referencedColumnName: "id" },
   ])
-  grantedByUserGuild: UserGuild;
+  grantedByUserGuild: Relation<UserGuild>;
 }

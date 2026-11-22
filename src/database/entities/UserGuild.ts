@@ -1,15 +1,13 @@
-import {
-  Column,
+import { Column,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { Guild } from "./Guild";
-import { Users } from "./Users";
-import { GuildRoleInventory } from "./GuildRoleInventory";
+  PrimaryGeneratedColumn, type Relation } from "typeorm";
+import { Guild } from "./Guild.js";
+import { Users } from "./Users.js";
+import { GuildRoleInventory } from "./GuildRoleInventory.js";
 
 @Index("user_guild_unique", ["userId", "guildId"], { unique: true })
 @Index("user_guild_guild_FK", ["guildId"], {})
@@ -36,18 +34,18 @@ export class UserGuild {
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "guild_id", referencedColumnName: "id" }])
-  guild: Guild;
+  guild: Relation<Guild>;
 
   @ManyToOne(() => Users, (users) => users.userGuilds, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
-  user: Users;
+  user: Relation<Users>;
 
   @OneToMany(
     () => GuildRoleInventory,
     (guildRoleInventory) => guildRoleInventory.grantedByUserGuild
   )
-  guildRoleInventories: GuildRoleInventory[];
+  guildRoleInventories: Relation<GuildRoleInventory[]>;
 }

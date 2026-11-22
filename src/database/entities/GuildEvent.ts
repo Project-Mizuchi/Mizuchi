@@ -1,16 +1,14 @@
-import {
-  Column,
+import { Column,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { GuildEventRoleMap } from "./GuildEventRoleMap";
-import { Event } from "./Event";
-import { Guild } from "./Guild";
-import { Webhook } from "./Webhook";
+  PrimaryGeneratedColumn, type Relation } from "typeorm";
+import { GuildEventRoleMap } from "./GuildEventRoleMap.js";
+import { Event } from "./Event.js";
+import { Guild } from "./Guild.js";
+import { Webhook } from "./Webhook.js";
 
 @Index("guild_event_guild_FK", ["guildId"], {})
 @Index("guild_event_event_FK", ["eventId"], {})
@@ -40,26 +38,26 @@ export class GuildEvent {
     () => GuildEventRoleMap,
     (guildEventRoleMap) => guildEventRoleMap.guildEvent
   )
-  guildEventRoleMaps: GuildEventRoleMap[];
+  guildEventRoleMaps: Relation<GuildEventRoleMap[]>;
 
   @ManyToOne(() => Event, (event) => event.guildEvents, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "event_id", referencedColumnName: "id" }])
-  event: Event;
+  event: Relation<Event>;
 
   @ManyToOne(() => Guild, (guild) => guild.guildEvents, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "guild_id", referencedColumnName: "id" }])
-  guild: Guild;
+  guild: Relation<Guild>;
 
   @ManyToOne(() => Webhook, (webhook) => webhook.guildEvents, {
     onDelete: "SET NULL",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "announcement_webhook_id", referencedColumnName: "id" }])
-  announcementWebhook: Webhook;
+  announcementWebhook: Relation<Webhook>;
 }

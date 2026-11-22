@@ -1,13 +1,11 @@
-import {
-  Column,
+import { Column,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { Currency } from "./Currency";
-import { Users } from "./Users";
+  PrimaryGeneratedColumn, type Relation } from "typeorm";
+import { Currency } from "./Currency.js";
+import { Users } from "./Users.js";
 
 @Index("currencyid", ["currencyid"], {})
 @Index("userid", ["userid"], {})
@@ -44,19 +42,19 @@ export class Transaction {
     onUpdate: "RESTRICT",
   })
   @JoinColumn([{ name: "currencyid", referencedColumnName: "id" }])
-  currency: Currency;
+  currency: Relation<Currency>;
 
   @ManyToOne(() => Users, (users) => users.transactions, {
     onDelete: "CASCADE",
     onUpdate: "RESTRICT",
   })
   @JoinColumn([{ name: "userid", referencedColumnName: "snowflake" }])
-  user: Users;
+  user: Relation<Users>;
 
   @ManyToOne(() => Users, (users) => users.transactions2, {
     onDelete: "RESTRICT",
     onUpdate: "RESTRICT",
   })
   @JoinColumn([{ name: "initatedbyuserid", referencedColumnName: "snowflake" }])
-  initatedbyuser: Users;
+  initatedbyuser: Relation<Users>;
 }

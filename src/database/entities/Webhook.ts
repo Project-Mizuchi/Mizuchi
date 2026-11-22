@@ -1,14 +1,12 @@
-import {
-  Column,
+import { Column,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { GuildEvent } from "./GuildEvent";
-import { Guild } from "./Guild";
+  PrimaryGeneratedColumn, type Relation } from "typeorm";
+import { GuildEvent } from "./GuildEvent.js";
+import { Guild } from "./Guild.js";
 
 @Index("webhook_guild_FK", ["guildId"], {})
 @Entity("webhook", { schema: "Tavare" })
@@ -29,12 +27,12 @@ export class Webhook {
   channelSnowflake: string;
 
   @OneToMany(() => GuildEvent, (guildEvent) => guildEvent.announcementWebhook)
-  guildEvents: GuildEvent[];
+  guildEvents: Relation<GuildEvent[]>;
 
   @ManyToOne(() => Guild, (guild) => guild.webhooks, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "guild_id", referencedColumnName: "id" }])
-  guild: Guild;
+  guild: Relation<Guild>;
 }

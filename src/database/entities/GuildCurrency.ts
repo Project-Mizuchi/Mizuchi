@@ -1,16 +1,14 @@
-import {
-  Column,
+import { Column,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { Currency } from "./Currency";
-import { Event } from "./Event";
-import { Guild } from "./Guild";
-import { GuildCurrencyEmoji } from "./GuildCurrencyEmoji";
+  PrimaryGeneratedColumn, type Relation } from "typeorm";
+import { Currency } from "./Currency.js";
+import { Event } from "./Event.js";
+import { Guild } from "./Guild.js";
+import { GuildCurrencyEmoji } from "./GuildCurrencyEmoji.js";
 
 @Index("guild_currency_guild_FK", ["guildId"], {})
 @Index("guild_currency_currency_FK", ["currencyId"], {})
@@ -48,25 +46,25 @@ export class GuildCurrency {
     onUpdate: "RESTRICT",
   })
   @JoinColumn([{ name: "currency_id", referencedColumnName: "id" }])
-  currency: Currency;
+  currency: Relation<Currency>;
 
   @ManyToOne(() => Event, (event) => event.guildCurrencies, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "event_id", referencedColumnName: "id" }])
-  event: Event;
+  event: Relation<Event>;
 
   @ManyToOne(() => Guild, (guild) => guild.guildCurrencies, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "guild_id", referencedColumnName: "id" }])
-  guild: Guild;
+  guild: Relation<Guild>;
 
   @OneToMany(
     () => GuildCurrencyEmoji,
     (guildCurrencyEmoji) => guildCurrencyEmoji.guildCurrency
   )
-  guildCurrencyEmojis: GuildCurrencyEmoji[];
+  guildCurrencyEmojis: Relation<GuildCurrencyEmoji[]>;
 }

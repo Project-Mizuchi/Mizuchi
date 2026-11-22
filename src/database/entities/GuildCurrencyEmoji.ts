@@ -1,12 +1,10 @@
-import {
-  Column,
+import { Column,
   Entity,
   Index,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { GuildCurrency } from "./GuildCurrency";
+  PrimaryGeneratedColumn, type Relation } from "typeorm";
+import { GuildCurrency } from "./GuildCurrency.js";
 
 @Index("guild_currency_emoji_guild_currency_FK", ["guildCurrencyId"], {})
 @Entity("guild_currency_emoji", { schema: "Tavare" })
@@ -32,5 +30,5 @@ export class GuildCurrencyEmoji {
     { onDelete: "CASCADE", onUpdate: "CASCADE" }
   )
   @JoinColumn([{ name: "guild_currency_id", referencedColumnName: "id" }])
-  guildCurrency: GuildCurrency;
+  guildCurrency: Relation<GuildCurrency>;
 }

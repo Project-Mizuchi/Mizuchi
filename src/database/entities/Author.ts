@@ -7,10 +7,11 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  type Relation,
 } from "typeorm";
-import { AuthorLink } from "./AuthorLink";
-import { Guild } from "./Guild";
-import { Users } from "./Users";
+import { AuthorLink } from "./AuthorLink.js";
+import { Guild } from "./Guild.js";
+import { Users } from "./Users.js";
 
 @Index("author_user", ["userId"], { unique: true })
 @Index("author_unique", ["name"], { unique: true })
@@ -76,19 +77,19 @@ export class Author {
   imageUrl: string | null;
 
   @OneToMany(() => AuthorLink, (authorLink) => authorLink.author)
-  authorLinks: AuthorLink[];
+  authorLinks: Relation<AuthorLink[]>;
 
   @ManyToOne(() => Guild, (guild) => guild.authors, {
     onDelete: "SET NULL",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "answer_channel_guild_id", referencedColumnName: "id" }])
-  answerChannelGuild: Guild;
+  answerChannelGuild: Relation<Guild>;
 
   @OneToOne(() => Users, (users) => users.author, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
-  user: Users;
+  user: Relation<Users>;
 }

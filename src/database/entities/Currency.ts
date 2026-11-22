@@ -1,12 +1,10 @@
-import {
-  Column,
+import { Column,
   Entity,
   Index,
   OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { GuildCurrency } from "./GuildCurrency";
-import { Transaction } from "./Transaction";
+  PrimaryGeneratedColumn, type Relation } from "typeorm";
+import { GuildCurrency } from "./GuildCurrency.js";
+import { Transaction } from "./Transaction.js";
 
 @Index("id_UNIQUE", ["id"], { unique: true })
 @Entity("currency", { schema: "Tavare" })
@@ -24,8 +22,8 @@ export class Currency {
   active: boolean;
 
   @OneToMany(() => GuildCurrency, (guildCurrency) => guildCurrency.currency)
-  guildCurrencies: GuildCurrency[];
+  guildCurrencies: Relation<GuildCurrency[]>;
 
   @OneToMany(() => Transaction, (transaction) => transaction.currency)
-  transactions: Transaction[];
+  transactions: Relation<Transaction[]>;
 }
