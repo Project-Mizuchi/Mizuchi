@@ -3,14 +3,26 @@
   "version": "3.0.0",
   "license": "AGPL-3.0-only",
   "description": "Custom Discord bot for the Climber's Court",
+  "type": "module",
   "scripts": {
-    "start": "ts-node ./src/bot.mts",
+    "start": "node --env-file=.env.prod dist/bot.mjs",
     "lint": "npm run eslint:lint && npm run prettier:lint",
     "eslint:lint": "eslint .",
     "prettier:lint": "prettier --check .",
     "format": "npm run eslint:fix && npm run prettier:fix",
     "eslint:fix": "eslint --fix .",
-    "prettier:fix": "prettier --write ."
+    "prettier:fix": "prettier --write .",
+    "typeorm": "node --env-file=.env.dev ./node_modules/typeorm/cli-ts-node-esm.js -d ./src/database/dataSource.ts",
+    "typeorm:prod": "node --env-file=.env.production ./node_modules/typeorm/cli-ts-node-esm.js -d ./src/database/dataSource.ts",
+    "mig:gen": "npm run typeorm -- migration:generate ./src/database/migration/UpdateSchema",
+    "mig:gen:named": "npm run typeorm -- migration:generate",
+    "mig:dev": "npm run typeorm -- migration:run",
+    "mig:prod": "npm run typeorm:prod -- migration:run",
+    "build": "tsc",
+    "dev": "concurrently \"tsc --watch\" \"node --watch --env-file=.env.dev dist/bot.js\"",
+    "deploy": "npm run build && node --env-file=.env.dev dist/deployCommands.js",
+    "start": "node --env-file=.env.prod dist/bot.js",
+    "prod": "npm run build && npm start"
   },
   "devDependencies": {
     "@eslint/css": "^2.0.1",
@@ -18,19 +30,27 @@
     "@eslint/json": "^2.1.1",
     "@eslint/markdown": "^8.0.3",
     "@types/node": "^26.6.6",
+    "concurrently": "^10.0.7",
+    "cross-env": "^10.1.0",
     "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.14.0",
     "jiti": "^2.7.0",
     "prettier": "^3.9.10",
+    "tsx": "^4.23.15",
     "typescript-eslint": "^8.72.1"
   },
   "engines": {
     "node": "24.14.1"
   },
   "dependencies": {
+    "augurbot-ts": "^3.3.7",
     "discord.js": "^14.28.1",
     "dotenv": "^18.0.9",
-    "ts-node": "^10.9.2"
+    "mariadb": "^3.5.4",
+    "mysql2": "^3.24.6",
+    "reflect-metadata": "^0.2.2",
+    "ts-node": "^10.9.2",
+    "typeorm": "^1.1.2"
   }
 }
